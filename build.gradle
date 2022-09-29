@@ -1,0 +1,36 @@
+apply plugin: 'java'
+apply plugin: 'jacoco'
+apply plugin: 'application'
+
+
+mainClassName = 'PrivateKeyMiner.Main'
+
+repositories {
+    mavenCentral()
+    maven { url "https://jitpack.io" }
+    maven { url "http://repository.openmindonline.it/" }
+    //jcenter()
+}
+
+dependencies {
+    testImplementation     'junit:junit:4.13'
+    
+    // https://mvnrepository.com/artifact/org.bitcoinj/bitcoinj-core
+    implementation group: 'org.bitcoinj', name: 'bitcoinj-core', version: '0.14.7'
+    
+    // https://mvnrepository.com/artifact/org.json/json
+    implementation group: 'org.json', name: 'json', version: '20201115'
+    
+    // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
+    implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.9.0'
+}
+
+jar {
+    manifest {
+        attributes "Main-Class": mainClassName
+    }
+    
+    from {
+        configurations.runtimeClasspath.findAll { it.name.endsWith('jar') }.collect { zipTree(it) }
+    }
+}
